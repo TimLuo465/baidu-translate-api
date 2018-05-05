@@ -1,0 +1,12 @@
+{
+  "name": "Lux",
+  "version": "1.0.0",
+  "description": "A translate lib",
+  "main": "index.js",
+  "repository": "https://github.com/TimLuo465/Lux.git",
+  "author": "Tim Luo <timluo465@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "run": "node index.js"
+  }
+}
