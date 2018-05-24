@@ -8,5 +8,8 @@
   "license": "MIT",
   "scripts": {
     "run": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
   }
 }
