@@ -1,15 +1,33 @@
 const request = require("request");
+const token = require("./token");
 
-// BAIDUID 396DB40732A5AFFEE75D334BF3122085:FG=1
-const jar = request.jar();
-const cookies = request.cookie("BAIDUID=FE4877CC01DBC1F78D71472CE16CDAB2:FG=1")
-const url = "http://fanyi.baidu.com/v2transapi?from=zh&to=en&query=%E6%B5%8B%E8%AF%95&transtype=realtime&simple_means_flag=3&sign=706553.926920&token=6084690412299b5fcf05ecb68da2e9a1";
+const url = "http://fanyi.baidu.com/v2transapi";
 
-jar.setCookie(cookies, url)
+function params(o={}) {
+    return Object.keys(o).reduce((prev, k, i) => `${prev}${i?"&":""}${k}=${encodeURIComponent(o[k])}`, "?");
+}
 
-request({
-    url: url,
-    jar: jar
-}, (err, res, body) => {
-    console.log(JSON.parse(decodeURIComponent(body)));
+token.get("测试").then(res => {
+    const { sign, cookie } = res;
+    const data = {
+        form: "zh",
+        to: "en",
+        query: "测试",
+        transtype: "realtime",
+        simple_means_flag: 3,
+        sign,
+        token: res.token
+    };
+    const jar = request.jar();
+    const uri = `${url}${params(data)}`;
+    const cookies = request.cookie(cookie, url);
+
+    jar.setCookie(cookies, uri)
+
+    request({
+        url: uri,
+        jar: jar
+    }, (err, res, body) => {
+        console.log(JSON.parse(decodeURIComponent(body)));
+    });
 });
