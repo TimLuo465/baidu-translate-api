@@ -67,29 +67,21 @@ function e(r) {
 // END
 
 const request = require("request");
-
-const jar = request.jar();
-const url = "http://fanyi.baidu.com";
+const cookie = require("./cookie");
+const { FANYI_BAIDU_URL } = require("./constant");
 const regExp = {
     gtk: /gtk\s=\s'(.*?)';/g,
     token: /token:\s'(.*?)',/g
 };
 
-jar.setCookie("BAIDUID=FE4877CC01DBC1F78D71472CE16CDAB2:FG=1", url);
-
-function getCookie(key, cookies = []) {
-    let v = [];
-    let r = new RegExp(`${key}=(.*?);`, "gim");
-    
-    cookies.every(c => !(v = String(c).match(r)));
-
-    return (v || []).toString();
-}
-
-function update() {
+function update(cookies) {
     return new Promise((resolve, reject) => {
-        request.get(url, { jar }, (err, res, body) => {
-            const cookies = jar.getCookies(url);
+        const jar = request.jar();
+
+        jar.setCookie(cookies, FANYI_BAIDU_URL);
+        
+        request.get(FANYI_BAIDU_URL, { jar }, (err, res, body) => {
+            
             const gtk = body.match(regExp.gtk);
             let token = body.match(regExp.token);
             
@@ -100,19 +92,20 @@ function update() {
             if(token) {
                 token = token[0].replace(regExp.token, "$1");
             }
-
-            resolve({
-                token,
-                cookie: getCookie("BAIDUID", cookies)
-            });
+            
+            resolve({token, cookies});
         });
     });
 }
 
 module.exports.get = text => {
-    return update().then(({token, cookie}) => {
-        let sign = e(text);
-        
-        return { sign, token, cookie };
-    });
+    return cookie.get()
+        .then(update)
+        .then(({ token, cookies })=> {
+            return { 
+                sign: e(text),
+                token,
+                cookies
+            };
+        });
 };

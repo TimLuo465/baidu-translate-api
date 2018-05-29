@@ -1,37 +1,39 @@
 const request = require("request");
 const token = require("./token");
-
-const url = "http://fanyi.baidu.com/v2transapi";
+const cookie = require("./cookie");
+const { FANYI_BAIDU_API_URL } = require("./constant");
 
 function params(o={}) {
     return Object.keys(o).reduce((prev, k, i) => `${prev}${i?"&":""}${k}=${encodeURIComponent(o[k])}`, "?");
 }
 
-token.get("精致").then(res => {
-    const { sign, cookie } = res;
-    const data = {
-        form: "zh",
-        to: "en",
-        query: "精致",
-        transtype: "realtime",
-        simple_means_flag: 3,
-        sign,
-        token: res.token
-    };
-    const jar = request.jar();
-    const uri = `${url}${params(data)}`;
-    const cookies = request.cookie(cookie, url);
+function translate({query, from, to}) {
+    return new Promise((resolve, reject) => {
+        token.get(query).then( ({sign, token, cookies}) => {
+            const data = {
+                transtype: "realtime",
+                simple_means_flag: 3,
+                from, to, query, sign, token
+            };
+            const jar = request.jar();
+            const uri = `${FANYI_BAIDU_API_URL}${params(data)}`;
+    
+            jar.setCookie(cookies, uri)
+    
+            request({
+                url: uri,
+                jar
+            }, (err, res, body) => {
+                let result = JSON.parse(body);
 
-    jar.setCookie(cookies, uri)
-    console.log(cookie, uri)
-    request({
-        url: uri,
-        jar: jar
-    }, (err, res, body) => {
-        console.log(JSON.parse(decodeURIComponent(body)));
+                resolve(result.trans_result);
+            });
+        });
     });
-});
+}
 
-module.exports = ({}) => {
+module.exports = (query, opts={}) => {
+    const {from="zh", to="en"} = opts;
 
+    return translate({query, from, to});
 }
