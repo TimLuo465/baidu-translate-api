@@ -7,6 +7,9 @@
 
 // BEGIN
 
+var window = {
+    gtk: null
+};
 var i = null;
 
 function a(r) {
@@ -72,7 +75,7 @@ const regExp = {
     token: /token:\s'(.*?)',/g
 };
 
-jar.setCookie("BAIDUID=2753E96AAF2D9A7D97AB553C54DAD260:FG=1", url);
+jar.setCookie("BAIDUID=FE4877CC01DBC1F78D71472CE16CDAB2:FG=1", url);
 
 function getCookie(key, cookies = []) {
     let v = [];
@@ -91,7 +94,7 @@ function update() {
             let token = body.match(regExp.token);
             
             if (gtk) {
-                i = gtk[0].replace(regExp.gtk, "$1");
+                window.gtk = gtk[0].replace(regExp.gtk, "$1");
             }
             
             if(token) {
@@ -109,7 +112,7 @@ function update() {
 module.exports.get = text => {
     return update().then(({token, cookie}) => {
         let sign = e(text);
-
+        
         return { sign, token, cookie };
     });
 };

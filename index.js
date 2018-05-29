@@ -1,7 +1,5 @@
-const translate = require("./src/translate");
+const cookie = require("./src/cookie");
 
-translate({
-    from: "zh-CN",
-    to: "en",
-    query: "测试"
+cookie.get().then(cookies => {
+    console.log(cookies)
 });

@@ -7,12 +7,12 @@ function params(o={}) {
     return Object.keys(o).reduce((prev, k, i) => `${prev}${i?"&":""}${k}=${encodeURIComponent(o[k])}`, "?");
 }
 
-token.get("测试").then(res => {
+token.get("精致").then(res => {
     const { sign, cookie } = res;
     const data = {
         form: "zh",
         to: "en",
-        query: "测试",
+        query: "精致",
         transtype: "realtime",
         simple_means_flag: 3,
         sign,
@@ -23,7 +23,7 @@ token.get("测试").then(res => {
     const cookies = request.cookie(cookie, url);
 
     jar.setCookie(cookies, uri)
-
+    console.log(cookie, uri)
     request({
         url: uri,
         jar: jar
@@ -31,3 +31,7 @@ token.get("测试").then(res => {
         console.log(JSON.parse(decodeURIComponent(body)));
     });
 });
+
+module.exports = ({}) => {
+
+}
