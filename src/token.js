@@ -67,6 +67,7 @@ function e(r) {
 // END
 
 const request = require("request");
+const store = require("./store");
 const cookie = require("./cookie");
 const { FANYI_BAIDU_URL } = require("./constant");
 const regExp = {
@@ -77,6 +78,7 @@ const regExp = {
 function update(cookies) {
     return new Promise((resolve, reject) => {
         const jar = request.jar();
+        const cookies = store.getCookies();
 
         jar.setCookie(cookies, FANYI_BAIDU_URL);
         
@@ -99,13 +101,10 @@ function update(cookies) {
 }
 
 module.exports.get = text => {
-    return cookie.get()
-        .then(update)
-        .then(({ token, cookies })=> {
-            return { 
-                sign: e(text),
-                token,
-                cookies
-            };
-        });
+    return update().then(({ token, cookies })=> {
+        return { 
+            sign: e(text),
+            token,
+        };
+    });
 };

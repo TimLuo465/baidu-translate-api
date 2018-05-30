@@ -12,6 +12,7 @@
 
 const translate = require("./src/translate");
 
-translate("测试").then(res => {
+translate("我们来翻译!").then(res => {
+    // console.log(res);
     console.log(res.data[0].dst);
 });

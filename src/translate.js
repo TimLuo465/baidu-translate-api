@@ -25,8 +25,12 @@ function translate({query, from, to}) {
                 jar
             }, (err, res, body) => {
                 let result = JSON.parse(body);
-
-                resolve(result.trans_result);
+                
+                if (result.trans_result) {
+                    resolve(result.trans_result);
+                } else {
+                    reject(result);
+                }
             });
         });
     });

@@ -1,6 +1,3 @@
-const request = require("request");
-const { FANYI_BAIDU_URL } = require("./constant");
-
 function getCookie(key, cookies = []) {
     const r = new RegExp(`${key}=(.*?);`, "gim");
     let cookie = "";
@@ -14,28 +11,31 @@ function getExpires(cookie = "") {
     return new Date(cookie.replace(/.*Expires=(.*?);.*/g, "$1"));
 }
 
-const store = {
-    cookie: "",
-    expires: null
-};
+
+const store = require("./store")
+const request = require("request");
+const { FANYI_BAIDU_URL } = require("./constant");
 
 module.exports = {
     get: () => {
         return new Promise((resolve, reject) => {
             const jar = request.jar();
-            const { cookie, exports } = store;
+            const cookies = store.getCookies();
             
-            if(cookie && expires > new Date()) {
-                return resolve(cookie)
+            if(cookies && cookies.expires > new Date()) {
+                return resolve(cookies.value)
             }
 
             request(FANYI_BAIDU_URL, { jar }, () => {
-                let cookies = jar.getCookies(FANYI_BAIDU_URL);
+                let jar_cookies = jar.getCookies(FANYI_BAIDU_URL);
+                let cookies = getCookie("BAIDUID", jar_cookies);
 
-                store.cookie = getCookie("BAIDUID", cookies);
-                store.expires = getExpires(store.cookie);
+                store.setCookies({
+                    value: cookies,
+                    expires: getExpires(cookies)
+                });
 
-                resolve(store.cookie);
+                resolve(cookies);
             });
         });
     }

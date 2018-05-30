@@ -1,5 +1,5 @@
 {
-  "name": "Lux",
+  "name": "baidu-translate-api",
   "version": "1.0.0",
   "description": "A translate lib",
   "main": "index.js",
@@ -10,6 +10,7 @@
     "run": "node index.js"
   },
   "dependencies": {
+    "configstore": "^3.1.2",
     "request": "^2.87.0"
   }
 }
