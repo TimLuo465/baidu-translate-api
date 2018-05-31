@@ -75,7 +75,7 @@ const regExp = {
     token: /token:\s'(.*?)',/g
 };
 
-function update(cookies) {
+function update() {
     return new Promise((resolve, reject) => {
         const jar = request.jar();
         const cookies = store.getCookies();
@@ -83,7 +83,6 @@ function update(cookies) {
         jar.setCookie(cookies, FANYI_BAIDU_URL);
         
         request.get(FANYI_BAIDU_URL, { jar }, (err, res, body) => {
-            
             const gtk = body.match(regExp.gtk);
             let token = body.match(regExp.token);
             
@@ -94,17 +93,44 @@ function update(cookies) {
             if(token) {
                 token = token[0].replace(regExp.token, "$1");
             }
-            
-            resolve({token, cookies});
+
+            store.setParams({
+                gtk: window.gtk,
+                token,
+                expires: getTomorrowZero()
+            });
+
+            resolve(token);
         });
     });
 }
 
-module.exports.get = text => {
-    return update().then(({ token, cookies })=> {
-        return { 
-            sign: e(text),
-            token,
-        };
+function getTomorrowZero() {
+    const now = new Date();
+
+    now.setHours(24);
+    now.setMinutes(0);
+
+    return now.setSeconds(0);
+}
+
+module.exports.get = (text = "") => {
+    return new Promise((resolve, reject) => {
+        // let params = store.getParams();
+
+        // if (params && params.expires > new Date()) {
+        //     window.gtk = params.gtk;
+
+        //     return resolve({
+        //         sign: e(text),
+        //         token: params.token
+        //     });
+        // }
+
+        update().then(token => {
+            let sign = e(text);
+
+            resolve({ sign, token });
+        });
     });
 };

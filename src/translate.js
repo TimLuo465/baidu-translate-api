@@ -1,6 +1,5 @@
-const request = require("request");
+let request = require("request");
 const token = require("./token");
-const cookie = require("./cookie");
 const { FANYI_BAIDU_API_URL } = require("./constant");
 
 function params(o={}) {
@@ -9,35 +8,37 @@ function params(o={}) {
 
 function translate({query, from, to}) {
     return new Promise((resolve, reject) => {
-        token.get(query).then( ({sign, token, cookies}) => {
+        token.get(query).then( ({sign, token}) => {
             const data = {
                 transtype: "realtime",
                 simple_means_flag: 3,
                 from, to, query, sign, token
             };
-            const jar = request.jar();
-            const uri = `${FANYI_BAIDU_API_URL}${params(data)}`;
-    
-            jar.setCookie(cookies, uri)
     
             request({
-                url: uri,
-                jar
+                url: `${FANYI_BAIDU_API_URL}${params(data)}`
             }, (err, res, body) => {
-                let result = JSON.parse(body);
-                
-                if (result.trans_result) {
-                    resolve(result.trans_result);
-                } else {
-                    reject(result);
-                }
+                if (body.err) return reject(body);
+
+                let result = JSON.parse(body)
+
+                resolve(result.trans_result);
             });
         });
     });
 }
 
+const cookie = require("./cookie");
+
 module.exports = (query, opts={}) => {
     const {from="zh", to="en"} = opts;
 
-    return translate({query, from, to});
+    return cookie.get().then(cookies => {
+        const jar = request.jar();
+        
+        jar.setCookie(cookies, FANYI_BAIDU_API_URL)
+        request = request.defaults({jar});
+
+        return translate({ query, from, to });
+    });
 }
