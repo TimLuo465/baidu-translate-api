@@ -18,7 +18,7 @@ const { COOKIES, PARAMS } = require("./constant");
  * }
  */
 module.exports = {
-    getCookies: () => (conf.get(COOKIES) || {}).value,
+    getCookies: () => conf.get(COOKIES),
     setCookies: cookies => conf.set(COOKIES, cookies),
     getParams: () => conf.get(PARAMS),
     setParams: params => conf.set(PARAMS, params)

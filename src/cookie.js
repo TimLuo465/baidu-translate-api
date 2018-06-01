@@ -22,20 +22,20 @@ module.exports = {
             const jar = request.jar();
             const cookies = store.getCookies();
             
-            if(cookies && cookies.expires > new Date()) {
-                return resolve(cookies.value)
+            if (cookies && new Date(cookies.expires) > new Date()) {
+                return resolve();
             }
 
             request(FANYI_BAIDU_URL, { jar }, () => {
                 let jar_cookies = jar.getCookies(FANYI_BAIDU_URL);
-                let cookies = getCookie("BAIDUID", jar_cookies);
+                let value = getCookie("BAIDUID", jar_cookies);
 
                 store.setCookies({
-                    value: cookies,
-                    expires: getExpires(cookies)
+                    value,
+                    expires: getExpires(value)
                 });
 
-                resolve(cookies);
+                resolve();
             });
         });
     }

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A translate lib",
   "main": "index.js",
-  "repository": "https://github.com/TimLuo465/Lux.git",
+  "repository": "https://github.com/TimLuo465/baidu-translate-api.git",
   "author": "Tim Luo <timluo465@gmail.com>",
   "license": "MIT",
   "scripts": {

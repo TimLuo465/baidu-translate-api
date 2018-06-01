@@ -80,7 +80,7 @@ function update() {
         const jar = request.jar();
         const cookies = store.getCookies();
 
-        jar.setCookie(cookies, FANYI_BAIDU_URL);
+        jar.setCookie(cookies.value, FANYI_BAIDU_URL);
         
         request.get(FANYI_BAIDU_URL, { jar }, (err, res, body) => {
             const gtk = body.match(regExp.gtk);
@@ -114,18 +114,18 @@ function getTomorrowZero() {
     return now.setSeconds(0);
 }
 
-module.exports.get = (text = "") => {
+module.exports.get = text => {
     return new Promise((resolve, reject) => {
-        // let params = store.getParams();
+        let params = store.getParams();
 
-        // if (params && params.expires > new Date()) {
-        //     window.gtk = params.gtk;
-
-        //     return resolve({
-        //         sign: e(text),
-        //         token: params.token
-        //     });
-        // }
+        if (params && params.expires > new Date()) {
+            window.gtk = params.gtk;
+            
+            return resolve({
+                sign: e(text),
+                token: params.token
+            });
+        }
 
         update().then(token => {
             let sign = e(text);

@@ -10,8 +10,10 @@
 //     console.log(res);
 // });
 
-const translate = require("./src/translate");
+// const translate = require("./src/translate");
 
-translate("我们来翻译!").then(res => {
-    console.log(res.data[0]);
-});
+// translate("让我们来翻译吧!").then(res => {
+//     console.log(res);
+// });
+
+module.exports = translate;
