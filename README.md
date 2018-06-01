@@ -2,10 +2,9 @@
 
 A free and unlimited API for Baidu Translate
 
-#Usage
+## Usage
 
-```
-
+``` js
 const translate = require("./index");
 
 translate("让我们来翻译吧!").then(res => {
@@ -14,4 +13,4 @@ translate("让我们来翻译吧!").then(res => {
 
 ```
 
-Working...
+### Did not finish, working...
