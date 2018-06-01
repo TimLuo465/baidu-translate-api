@@ -16,4 +16,6 @@
 //     console.log(res);
 // });
 
+const translate = require("./src/translate");
+
 module.exports = translate;

@@ -2,14 +2,16 @@
 
 A free and unlimited API for Baidu Translate
 
-Usage
+#Usage
 
 ```
-const translate = require("./src/translate");
+
+const translate = require("./index");
 
 translate("让我们来翻译吧!").then(res => {
     console.log(res);
 });
+
 ```
 
 Working...
