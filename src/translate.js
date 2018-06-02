@@ -50,10 +50,9 @@ const translate = {
 module.exports = (query, opts={}) => {
     const {from="zh", to="en", keywords=false} = opts;
 
+    if (keywords === false) return translate.v1({query, from, to});
+
     return cookie.get().then(() => {
-        if(version === true) {
-            return translate.v2({ query, from, to });
-        } 
-        return  translate.v1({query, from, to});
+        return translate.v2({ query, from, to });
     });
 }

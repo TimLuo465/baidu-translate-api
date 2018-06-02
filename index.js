@@ -13,7 +13,7 @@
 // const translate = require("./src/translate");
 
 // translate("让我们来翻译吧!", {
-//     version: "v2"
+//     keywords: true
 // }).then(res => {
 //     console.log(res);
 // });
