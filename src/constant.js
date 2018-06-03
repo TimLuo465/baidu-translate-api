@@ -5,6 +5,7 @@ module.exports = {
     transapi: {
         v1: `${url}/transapi`,
         v2: `${url}/v2transapi`,
+        langdetect: `${url}/langdetect`
     },
     COOKIES: "cookies",
     PARAMS: "params"
