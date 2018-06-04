@@ -12,12 +12,4 @@
 
 const translate = require("./src/translate");
 
-translate("让我们来翻译吧!", {
-    keywords: true
-}).then(res => {
-    console.log(res);
-});
-
-// const translate = require("./src/translate");
-
-// module.exports = translate;
+module.exports = translate;

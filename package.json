@@ -7,10 +7,14 @@
   "author": "Tim Luo <timluo465@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "run": "node index.js"
+    "run": "node index.js",
+    "test": "ava"
   },
   "dependencies": {
     "configstore": "^3.1.2",
     "request": "^2.87.0"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0"
   }
 }

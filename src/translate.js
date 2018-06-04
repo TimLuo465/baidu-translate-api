@@ -15,7 +15,7 @@ const translate = {
 
                 if (err || result.error) reject(err || result.msg);
                 
-                resolve(result.data);
+                resolve(result.data[0]);
             });
         });
     },
