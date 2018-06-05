@@ -14,6 +14,16 @@ translate("让我们来翻译吧!").then(res => {
 
 ```
 
+``` js
+const translate = require("./index");
+
+translate("让我们来翻译吧!").then(res => {
+    console.log(res.keywords);
+    // Let's translate it!
+});
+
+```
+
 ## API
 
 ### translate(query, options)
@@ -28,7 +38,7 @@ The text to be translated
 
 Type: `Object`
 
-- **from** Type: `String` Default: `zh`
+- **from** Type: `String` Default: `auto`
 - **to**   Type: `String` Default: `en`
 - **keywords** Type: `Boolean` Default: `false`
 

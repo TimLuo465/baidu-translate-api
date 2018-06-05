@@ -15,7 +15,7 @@ const translate = {
 
                 if (err || result.error) reject(err || result.msg);
                 
-                resolve(result.data[0]);
+                resolve({data: result.data[0]});
             });
         });
     },
@@ -39,9 +39,9 @@ const translate = {
                     if (error) return reject(error);
     
                     let result = JSON.parse(body);
-                    let { data, keywords } = result.trans_result;
+                    let { data } = result.trans_result;
 
-                    resolve({data, keywords});
+                    resolve({data: data[0]});
                 });
             });
         });
