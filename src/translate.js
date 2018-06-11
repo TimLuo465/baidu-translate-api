@@ -15,7 +15,16 @@ const translate = {
 
                 if (err || result.error) reject(err || result.msg);
                 
-                resolve({data: result.data[0]});
+                const {dst, src} = result.data[0];
+                
+                resolve({
+                    form: opts.form,
+                    to: opts.to,
+                    trans_result: {
+                        dst,
+                        src
+                    }
+                });
             });
         });
     },
@@ -39,9 +48,16 @@ const translate = {
                     if (error) return reject(error);
     
                     let result = JSON.parse(body);
-                    let { data } = result.trans_result;
+                    let { dst, src } = result.trans_result.data[0];
 
-                    resolve({data: data[0]});
+                    resolve({
+                        from,
+                        to,
+                        trans_result: {
+                            dst,
+                            src
+                        } 
+                    });
                 });
             });
         });

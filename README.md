@@ -42,4 +42,12 @@ Type: `Object`
 - **to**   Type: `String` Default: `en`
 - **keywords** Type: `Boolean` Default: `false`
 
+## Languages
+
+abbr | name
+---|---
+auto | Automatic detection
+zh | Chinese
+en | English
+
 ### Did not finish, working...
