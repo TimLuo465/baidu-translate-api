@@ -37,7 +37,7 @@ Type: `Object`
 - **to**   
     Type: `String`  Default: `en`
 
-    译文语言. 支持的语言 [Languages ](#languages)
+    译文语言. 支持的语言 - [Languages ](#languages)
     
 ### 返回 `object`:
 - `from` - 源语言
