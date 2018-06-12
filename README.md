@@ -4,7 +4,7 @@ A free and unlimited API for Baidu Translate
 
 ## Translations
 
-- [中文](https://github.com/TimLuo465/baidu-translate-api/zh-CN.md)
+- [中文](https://github.com/TimLuo465/baidu-translate-api/blob/master/zh-CN.md)
 
 ## Usage
 
