@@ -36,14 +36,23 @@ Type: `Object`
 
     Type: `String` Default: `auto`
     
-    The language in which the text should be translated
+    The language in which the query text or `auto`. Contain in [Languages ](#languages)
+
 - **to**   
+
     Type: `String`  Default: `en`
 
-    The language in which the text should be translated
+    The language in which the text should be translated. Contain in [Languages ](#languages)
+    
 ### Returns an `object`:
-- `from` 
-## Languages Support
+- `from` - The lanuage in which the query text.
+- `to`
+- `trans_result` *(object)*
+
+    - `dst` - The translation
+    - `src` - The source *(equal to query)*
+
+## Languages
 
 abbr | name
 ---|---
@@ -76,4 +85,3 @@ swe	| Swedish
 hu	| Hungarian
 cht	| Traditional Chinese
 vie	| Vietnamese
-### Did not finish, working...
