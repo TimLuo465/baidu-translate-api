@@ -4,7 +4,15 @@ A free and unlimited API for Baidu Translate
 
 ## Translations
 
-- [中文](/TimLuo465/baidu-translate-api/blob/master/zh-CN.md)
+- [中文](./blob/master/zh-CN.md)
+
+## Install
+
+``` npm install --save baidu-translate-api ```
+
+or
+
+``` yarn add baidu-translate-api ```
 
 ## Usage
 
@@ -12,7 +20,7 @@ A free and unlimited API for Baidu Translate
 const translate = require("./index");
 
 translate("让我们来翻译吧!").then(res => {
-    console.log(res.dst);
+    console.log(res.trans_result.dst);
     // Let's translate it!
 });
 

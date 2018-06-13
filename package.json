@@ -1,7 +1,7 @@
 {
   "name": "baidu-translate-api",
-  "version": "1.0.0",
-  "description": "A translate lib",
+  "version": "0.1.0",
+  "description": "A free and unlimited API for Baidu Translate",
   "main": "index.js",
   "repository": "https://github.com/TimLuo465/baidu-translate-api.git",
   "author": "Tim Luo <timluo465@gmail.com>",
@@ -16,5 +16,13 @@
   },
   "devDependencies": {
     "ava": "^0.25.0"
-  }
+  },
+  "keywords": [
+    "baidu",
+    "translate",
+    "translator",
+    "api",
+    "free",
+    "language"
+  ]
 }

@@ -2,13 +2,22 @@
 
 一个免费且不受限制的百度翻译API
 
+
+## 安装
+
+``` npm install --save baidu-translate-api ```
+
+or
+
+``` yarn add baidu-translate-api ```
+
 ## 用法
 
 ``` js
 const translate = require("./index");
 
 translate("让我们来翻译吧!").then(res => {
-    console.log(res.dst);
+    console.log(res.trans_result.dst);
     // Let's translate it!
 });
 
@@ -37,7 +46,7 @@ Type: `Object`
 - **to**   
     Type: `String`  Default: `en`
 
-    译文语言. 支持的语言 - [Languages ](#languages)
+    译文语言. 支持的语言 [Languages ](#languages)
     
 ### 返回 `object`:
 - `from` - 源语言
@@ -48,7 +57,7 @@ Type: `Object`
     - `src` - 请求翻译的文本
 ## Languages
 
-语言简写 | 名称
+abbr | name
 ---|---
 auto | 自动检测
 zh | 中文
