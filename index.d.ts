@@ -7,7 +7,7 @@ export = baidu_translate_api;
 declare function baidu_translate_api(
   query: string,
   opts: baidu_translate_api.options
-): baidu_translate_api.returnObject;
+): Promise<baidu_translate_api.returnObject>;
 
 declare namespace baidu_translate_api {
   export interface options {
@@ -15,7 +15,7 @@ declare namespace baidu_translate_api {
     to: string;
   }
 
-  export interface transObject {
+  export interface transResult {
     dst: string;
     src: string;
   }
@@ -23,6 +23,6 @@ declare namespace baidu_translate_api {
   export interface returnObject {
     from: string;
     to: string;
-    trans_object: transObject;
+    trans_result: transResult;
   }
 }
