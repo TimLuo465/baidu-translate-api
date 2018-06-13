@@ -1,4 +1,4 @@
-# baidu-translate-api
+# baidu-translate-api [![npm](https://img.shields.io/npm/v/baidu-translate-api.svg)](https://www.npmjs.com/package/baidu-translate-api)
 
 一个免费且不受限制的百度翻译API
 
