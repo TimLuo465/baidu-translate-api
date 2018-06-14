@@ -1,7 +1,3 @@
-// Type definitions for baidu-translate-api v0.2.1
-// Project:https://github.com/TimLuo465/baidu-translate-api
-// Definitions by: Yesterday17 <https://github.com/Yesterday17>
-
 export = baidu_translate_api;
 
 declare function baidu_translate_api(
