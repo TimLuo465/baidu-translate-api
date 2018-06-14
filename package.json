@@ -1,6 +1,6 @@
 {
   "name": "baidu-translate-api",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A free and unlimited API for Baidu Translate",
   "main": "index.js",
   "repository": "https://github.com/TimLuo465/baidu-translate-api.git",
