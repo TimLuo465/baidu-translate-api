@@ -1,0 +1,33 @@
+const languages = {
+    Auto: "auto",
+    Chinese: "zh",
+    English: "en",
+    Cantonese: "yue",
+    ClassicalChinese: "wyw",
+    Japanese: "jp",
+    Korean: "kor",
+    French: "fra",
+    Spanish: "spa",
+    Thai: "th",
+    Arabic: "ara",
+    Russian: "ru",
+    Portuguese: "pt",
+    German: "de",
+    Italian: "it",
+    Greek: "el",
+    Dutch: "nl",
+    Polish: "pl",
+    Bulgarian: "bul",
+    Estonian: "est",
+    Danish: "dan",
+    Finnish: "fin",
+    Czech: "cs",
+    Romanian: "rom",
+    Slovenia: "slo",
+    Swedish: "swe",
+    Hungarian: "hu",
+    TraditionalChinese: "cht",
+    Vietnamese: "vie"
+};
+
+module.exports = languages;

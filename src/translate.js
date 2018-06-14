@@ -5,7 +5,7 @@ const token = require("./token");
 const cookie = require("./cookie");
 const store = require("./store");
 
-const { FANYI_BAIDU_API_URL, transapi } = require("./constant");
+const { transapi } = require("./constant");
 
 const translate = {
     v1: opts => {
@@ -15,11 +15,12 @@ const translate = {
 
                 if (err || result.error) reject(err || result.msg);
                 
-                const {dst, src} = result.data[0];
+                const { from, to, data } = result;
+                const {dst, src} = data[0];
                 
                 resolve({
-                    form: opts.form,
-                    to: opts.to,
+                    from,
+                    to,
                     trans_result: {
                         dst,
                         src
@@ -48,7 +49,7 @@ const translate = {
                     if (error) return reject(error);
     
                     let result = JSON.parse(body);
-                    let { dst, src } = result.trans_result.data[0];
+                    let { dst, src, from, to } = result.trans_result.data[0];
 
                     resolve({
                         from,
@@ -79,8 +80,11 @@ const translate = {
     }
 };
 
+const language = require("./language");
+const { Auto, English } = language;
+
 module.exports = (query, opts={}) => {
-    let {from = "auto", to = "en", keywords = false} = opts;
+    let { from = Auto, to = English, keywords = false} = opts;
     let _translate = () => {
         if (keywords === false) return translate.v1({query, from, to});
 
@@ -90,7 +94,7 @@ module.exports = (query, opts={}) => {
     };
     
     return new Promise((resolve, reject) => {
-        if (from !== "auto") { 
+        if (from !== Auto) { 
             return resolve(_translate());
         }
 
@@ -99,4 +103,6 @@ module.exports = (query, opts={}) => {
             resolve(_translate());
         });
     });
-}
+};
+
+module.exports.language = language;
