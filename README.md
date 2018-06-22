@@ -97,3 +97,7 @@ swe	| Swedish
 hu	| Hungarian
 cht	| Traditional Chinese
 vie	| Vietnamese
+
+## AFTERWORD
+
+Welcome to star and issues. If this repo helped you, star is the greatest encouragement to me. 
