@@ -100,4 +100,4 @@ vie	| Vietnamese
 
 ## AFTERWORD
 
-Welcome to star and issues. If this repo helped you, star is the greatest encouragement to me. 
+If this repo helped you, give me a star and it's the greatest encouragement to me. 
