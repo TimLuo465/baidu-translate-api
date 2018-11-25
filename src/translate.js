@@ -13,8 +13,7 @@ const translate = {
             request(`${transapi.v1}?${querystring.stringify(opts)}`, (err, res, body="") => {
                 let result = JSON.parse(body);
 
-                if (err || result.error) reject(err || result.msg);
-                
+                if (err || result.error) return reject(err || result.msg);
                 const { from, to, data } = result;
                 const {dst, src} = data[0];
                 
@@ -44,11 +43,9 @@ const translate = {
                 jar.setCookie(cookies.value, url);
     
                 request(url, { jar }, (err, res, body) => {
-                    let error = err || body.error;
-    
-                    if (error) return reject(error);
-    
                     let result = JSON.parse(body);
+                    let error = err || result.error;
+                    if (error) return reject(error);
                     let { dst, src, from, to } = result.trans_result.data[0];
 
                     resolve({
@@ -68,11 +65,10 @@ const translate = {
             const url = `${transapi.langdetect}?query=${encodeURIComponent(query)}`;
             
             request(url, (err, res, body) => {
-                let error = err || body.error;
+                let result = JSON.parse(body);
+                let error = err || result.error;
 
                 if (error) return reject(error);
-
-                let result = JSON.parse(body);
 
                 resolve(result.lan);
             });
