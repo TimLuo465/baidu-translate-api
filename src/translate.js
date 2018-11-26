@@ -10,13 +10,16 @@ const { transapi } = require("./constant");
 const translate = {
     v1: opts => {
         return new Promise((resolve, reject) => {
-            request(`${transapi.v1}?${querystring.stringify(opts)}`, (err, res, body="") => {
+            request(`${transapi.v1}?${querystring.stringify(opts)}`, (err, res, body = "") => {
+                if (err) return reject(err);
+
                 let result = JSON.parse(body);
 
-                if (err || result.error) return reject(err || result.msg);
+                if (result.error) return reject(result);
+
                 const { from, to, data } = result;
-                const {dst, src} = data[0];
-                
+                const { dst, src } = data[0];
+
                 resolve({
                     from,
                     to,
@@ -28,9 +31,9 @@ const translate = {
             });
         });
     },
-    v2: ({query, from, to}) => {
+    v2: ({ query, from, to }) => {
         return new Promise((resolve, reject) => {
-            token.get(query).then( ({sign, token}) => {
+            token.get(query).then(({ sign, token }) => {
                 const data = {
                     transtype: "realtime",
                     simple_means_flag: 3,
@@ -39,13 +42,16 @@ const translate = {
                 const url = `${transapi.v2}?${querystring.stringify(data)}`;
                 const jar = request.jar();
                 const cookies = store.getCookies();
-                
+
                 jar.setCookie(cookies.value, url);
-    
+
                 request(url, { jar }, (err, res, body) => {
+                    if (err) return reject(err);
+
                     let result = JSON.parse(body);
-                    let error = err || result.error;
-                    if (error) return reject(error);
+
+                    if (result.error) return reject(result);
+
                     let { dst, src, from, to } = result.trans_result.data[0];
 
                     resolve({
@@ -54,7 +60,7 @@ const translate = {
                         trans_result: {
                             dst,
                             src
-                        } 
+                        }
                     });
                 });
             });
@@ -63,12 +69,13 @@ const translate = {
     langdetect: query => {
         return new Promise((resolve, reject) => {
             const url = `${transapi.langdetect}?query=${encodeURIComponent(query)}`;
-            
-            request(url, (err, res, body) => {
-                let result = JSON.parse(body);
-                let error = err || result.error;
 
-                if (error) return reject(error);
+            request(url, (err, res, body) => {
+                if (err) return reject(err);
+
+                let result = JSON.parse(body);
+
+                if (result.error) return reject(result);
 
                 resolve(result.lan);
             });
@@ -79,18 +86,18 @@ const translate = {
 const language = require("./language");
 const { Auto, English } = language;
 
-module.exports = (query, opts={}) => {
-    let { from = Auto, to = English, keywords = false} = opts;
+module.exports = (query, opts = {}) => {
+    let { from = Auto, to = English, keywords = false } = opts;
     let _translate = () => {
-        if (keywords === false) return translate.v1({query, from, to});
+        if (keywords === false) return translate.v1({ query, from, to });
 
         return cookie.get().then(() => {
             return translate.v2({ query, from, to });
         });
     };
-    
-    return new Promise((resolve, reject) => {
-        if (from !== Auto) { 
+
+    return new Promise(resolve => {
+        if (from !== Auto) {
             return resolve(_translate());
         }
 
