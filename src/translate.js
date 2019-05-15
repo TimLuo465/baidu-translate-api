@@ -8,29 +8,6 @@ const store = require("./store");
 const { transapi } = require("./constant");
 
 const translate = {
-    v1: opts => {
-        return new Promise((resolve, reject) => {
-            request(`${transapi.v1}?${querystring.stringify(opts)}`, (err, res, body = "") => {
-                if (err) return reject(err);
-
-                let result = JSON.parse(body);
-
-                if (result.error) return reject(result);
-
-                const { from, to, data } = result;
-                const { dst, src } = data[0];
-
-                resolve({
-                    from,
-                    to,
-                    trans_result: {
-                        dst,
-                        src
-                    }
-                });
-            });
-        });
-    },
     v2: ({ query, from, to }) => {
         return new Promise((resolve, reject) => {
             token.get(query).then(({ sign, token }) => {
@@ -48,20 +25,26 @@ const translate = {
                 request(url, { jar }, (err, res, body) => {
                     if (err) return reject(err);
 
-                    let result = JSON.parse(body);
+                    try {
+                        const result = JSON.parse(body);
 
-                    if (result.error) return reject(result);
+                        if(result.error) return reject(result);
 
-                    let { dst, src, from, to } = result.trans_result.data[0];
+                        const { trans_result } = result;
+                        const { from, to } = trans_result;
+                        const { dst, src } = trans_result.data[0];
 
-                    resolve({
-                        from,
-                        to,
-                        trans_result: {
-                            dst,
-                            src
-                        }
-                    });
+                        resolve({
+                            from,
+                            to,
+                            trans_result: {
+                                dst,
+                                src
+                            }
+                        });
+                    } catch(err) {
+                        reject(err);
+                    }
                 });
             });
         });
@@ -73,11 +56,15 @@ const translate = {
             request(url, (err, res, body) => {
                 if (err) return reject(err);
 
-                let result = JSON.parse(body);
+                try {
+                    let result = JSON.parse(body);
 
-                if (result.error) return reject(result);
+                    if (result.error) return reject(result);
 
-                resolve(result.lan);
+                    resolve(result.lan);
+                } catch(err) {
+                    return reject(err);
+                }
             });
         });
     }
@@ -87,10 +74,8 @@ const language = require("./language");
 const { Auto, English } = language;
 
 module.exports = (query, opts = {}) => {
-    let { from = Auto, to = English, keywords = false } = opts;
+    let { from = Auto, to = English } = opts;
     let _translate = () => {
-        if (keywords === false) return translate.v1({ query, from, to });
-
         return cookie.get().then(() => {
             return translate.v2({ query, from, to });
         });

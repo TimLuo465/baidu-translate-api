@@ -24,7 +24,7 @@ test('translate with options', async t => {
         const { trans_result, from, to } = res;
 
         t.is(trans_result.src, "让我们来翻译吧!");
-        t.is(trans_result.dst, "우리가 통역하자!");
+        t.is(trans_result.dst, "우리 번역해 봅시다!");
         t.is(from, "zh");
         t.is(to, "kor");
     } catch (err) {
