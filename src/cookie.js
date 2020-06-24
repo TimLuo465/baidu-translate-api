@@ -17,7 +17,7 @@ const request = require("request");
 const { FANYI_BAIDU_URL } = require("./constant");
 
 module.exports = {
-    get: () => {
+    get: (proxy) => {
         return new Promise((resolve, reject) => {
             const jar = request.jar();
             const cookies = store.getCookies();
@@ -26,7 +26,7 @@ module.exports = {
                 return resolve();
             }
 
-            request(FANYI_BAIDU_URL, { jar }, () => {
+            request(FANYI_BAIDU_URL, { jar ,proxy}, () => {
                 let jar_cookies = jar.getCookies(FANYI_BAIDU_URL);
                 let value = getCookie("BAIDUID", jar_cookies);
 
