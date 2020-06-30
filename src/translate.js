@@ -8,9 +8,9 @@ const store = require("./store");
 const { transapi } = require("./constant");
 
 const translate = {
-    v2: ({ query, from, to }) => {
+    v2: ({ query, from, to ,proxy}) => {
         return new Promise((resolve, reject) => {
-            token.get(query).then(({ sign, token }) => {
+            token.get(query,proxy).then(({ sign, token }) => {
                 const data = {
                     transtype: "realtime",
                     simple_means_flag: 3,
@@ -22,8 +22,9 @@ const translate = {
 
                 jar.setCookie(cookies.value, url);
 
-                request(url, { jar }, (err, res, body) => {
+                request(url, { jar ,proxy}, (err, res, body) => {
                     if (err) return reject(err);
+                    if(res.statusCode != 200) return  reject({statusCode:res.statusCode,statusMessage:res.statusMessage})
 
                     try {
                         const result = JSON.parse(body);
@@ -49,11 +50,11 @@ const translate = {
             });
         });
     },
-    langdetect: query => {
+    langdetect: (query,proxy) => {
         return new Promise((resolve, reject) => {
             const url = `${transapi.langdetect}?query=${encodeURIComponent(query)}`;
 
-            request(url, (err, res, body) => {
+            request(url,{proxy}, (err, res, body) => {
                 if (err) return reject(err);
 
                 try {
@@ -74,10 +75,10 @@ const language = require("./language");
 const { Auto, English } = language;
 
 module.exports = (query, opts = {}) => {
-    let { from = Auto, to = English } = opts;
+    let { from = Auto, to = English , proxy  } = opts;
     let _translate = () => {
-        return cookie.get().then(() => {
-            return translate.v2({ query, from, to });
+        return cookie.get(proxy).then(() => {
+            return translate.v2({ query, from, to, proxy });
         });
     };
 

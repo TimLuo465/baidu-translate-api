@@ -75,14 +75,14 @@ const regExp = {
     token: /token:\s'(.*?)',/g
 };
 
-function update() {
+function update(proxy) {
     return new Promise((resolve, reject) => {
         const jar = request.jar();
         const cookies = store.getCookies();
 
         jar.setCookie(cookies.value, FANYI_BAIDU_URL);
         
-        request.get(FANYI_BAIDU_URL, { jar }, (err, res, body) => {
+        request.get(FANYI_BAIDU_URL, { jar ,proxy}, (err, res, body) => {
             const gtk = body.match(regExp.gtk);
             let token = body.match(regExp.token);
             
@@ -114,7 +114,7 @@ function getTomorrowZero() {
     return now.setSeconds(0);
 }
 
-module.exports.get = text => {
+module.exports.get = (text , proxy) => {
     return new Promise((resolve, reject) => {
         let params = store.getParams();
 
@@ -127,7 +127,7 @@ module.exports.get = text => {
             });
         }
 
-        update().then(token => {
+        update(proxy).then(token => {
             let sign = e(text);
 
             resolve({ sign, token });
