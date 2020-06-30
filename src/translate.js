@@ -7,14 +7,49 @@ const store = require("./store");
 
 const { transapi } = require("./constant");
 
-const translate = {
-    v2: ({ query, from, to ,proxy}) => {
+const language = require("./language");
+const { Auto, English } = language;
+
+class Translate {
+    constructor(query, opts) {
+        this.query = query;
+        this.opts = {
+            from: Auto,
+            to: English,
+            requestOpts: {},
+            ...opts
+        };
+    }
+
+    request() {
+        const { from, requestOpts } = this.opts;
+
+        return new Promise(resolve => {
+            if (from !== Auto) {
+                resolve()
+            } else {
+                this.langdetect().then(lan => {
+                    this.opts.from = lan;
+                    resolve();
+                });
+            }
+        }).then(() => {
+            return cookie.get(requestOpts).then(() => this.trans());
+        }); 
+    }
+
+    trans() {
+        const { query, opts } = this;
+        const { requestOpts } = opts;
+
         return new Promise((resolve, reject) => {
-            token.get(query,proxy).then(({ sign, token }) => {
+            token.get(query, requestOpts).then(({ sign, token }) => {
                 const data = {
+                    query, sign, token,
+                    from: opts.from, 
+                    to: opts.to, 
                     transtype: "realtime",
                     simple_means_flag: 3,
-                    from, to, query, sign, token
                 };
                 const url = `${transapi.v2}?${querystring.stringify(data)}`;
                 const jar = request.jar();
@@ -22,14 +57,20 @@ const translate = {
 
                 jar.setCookie(cookies.value, url);
 
-                request(url, { jar ,proxy}, (err, res, body) => {
+                request(url, { jar, ...requestOpts }, (err, res, body) => {
                     if (err) return reject(err);
-                    if(res.statusCode != 200) return  reject({statusCode:res.statusCode,statusMessage:res.statusMessage})
+
+                    if (res.statusCode != 200) {
+                        return reject({ 
+                            statusCode: res.statusCode, 
+                            statusMessage: res.statusMessage 
+                        });
+                    }
 
                     try {
                         const result = JSON.parse(body);
 
-                        if(result.error) return reject(result);
+                        if (result.error) return reject(result);
 
                         const { trans_result } = result;
                         const { from, to } = trans_result;
@@ -43,55 +84,37 @@ const translate = {
                                 src
                             }
                         });
-                    } catch(err) {
+                    } catch (err) {
                         reject(err);
                     }
                 });
             });
-        });
-    },
-    langdetect: (query,proxy) => {
-        return new Promise((resolve, reject) => {
-            const url = `${transapi.langdetect}?query=${encodeURIComponent(query)}`;
+        });  
+    }
 
-            request(url,{proxy}, (err, res, body) => {
+    langdetect() {
+        return new Promise((resolve, reject) => {
+            const url = `${transapi.langdetect}?query=${encodeURIComponent(this.query)}`;
+
+            request(url, this.opts.requestOpts, (err, res, body) => {
                 if (err) return reject(err);
 
                 try {
                     let result = JSON.parse(body);
 
                     if (result.error) return reject(result);
-
+                    
                     resolve(result.lan);
-                } catch(err) {
+                } catch (err) {
                     return reject(err);
                 }
             });
         });
     }
-};
-
-const language = require("./language");
-const { Auto, English } = language;
+}
 
 module.exports = (query, opts = {}) => {
-    let { from = Auto, to = English , proxy  } = opts;
-    let _translate = () => {
-        return cookie.get(proxy).then(() => {
-            return translate.v2({ query, from, to, proxy });
-        });
-    };
-
-    return new Promise(resolve => {
-        if (from !== Auto) {
-            return resolve(_translate());
-        }
-
-        translate.langdetect(query).then(lan => {
-            from = lan;
-            resolve(_translate());
-        });
-    });
+    return new Translate(query, opts).request();
 };
 
 module.exports.language = language;

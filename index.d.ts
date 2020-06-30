@@ -9,6 +9,7 @@ declare namespace baidu_translate_api {
   export interface options {
     from?: string;
     to?: string;
+    requestOpts?: any;
   }
 
   export interface transResult {

@@ -56,6 +56,11 @@ Type: `Object`
 
     The language in which the text should be translated. Contain in [Languages ](#languages)
     
+- **requestOpts**   
+
+    Type: `RequestOptions`  Default: `{}`
+
+    reference [request options](https://github.com/request/request#requestoptions-callback)
 ### Returns an `object`:
 - `from` - The lanuage in which the query text.
 - `to`

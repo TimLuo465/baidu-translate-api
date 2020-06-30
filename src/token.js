@@ -68,29 +68,28 @@ function e(r) {
 
 const request = require("request");
 const store = require("./store");
-const cookie = require("./cookie");
 const { FANYI_BAIDU_URL } = require("./constant");
 const regExp = {
     gtk: /gtk\s=\s'(.*?)';/g,
     token: /token:\s'(.*?)',/g
 };
 
-function update(proxy) {
+function update(requestOpts) {
     return new Promise((resolve, reject) => {
         const jar = request.jar();
         const cookies = store.getCookies();
 
         jar.setCookie(cookies.value, FANYI_BAIDU_URL);
-        
-        request.get(FANYI_BAIDU_URL, { jar ,proxy}, (err, res, body) => {
+
+        request.get(FANYI_BAIDU_URL, { jar, ...requestOpts }, (err, res, body) => {
             const gtk = body.match(regExp.gtk);
             let token = body.match(regExp.token);
-            
+
             if (gtk) {
                 window.gtk = gtk[0].replace(regExp.gtk, "$1");
             }
-            
-            if(token) {
+
+            if (token) {
                 token = token[0].replace(regExp.token, "$1");
             }
 
@@ -114,20 +113,20 @@ function getTomorrowZero() {
     return now.setSeconds(0);
 }
 
-module.exports.get = (text , proxy) => {
+module.exports.get = (text, requestOpts) => {
     return new Promise((resolve, reject) => {
         let params = store.getParams();
 
         if (params && params.expires > new Date()) {
             window.gtk = params.gtk;
-            
+
             return resolve({
                 sign: e(text),
                 token: params.token
             });
         }
 
-        update(proxy).then(token => {
+        update(requestOpts).then(token => {
             let sign = e(text);
 
             resolve({ sign, token });

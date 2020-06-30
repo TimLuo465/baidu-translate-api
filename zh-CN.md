@@ -44,10 +44,16 @@ Type: `Object`
     翻译源语言或`auto`，支持的语言 - [Languages ](#languages)
     
 - **to**   
+
     Type: `String`  Default: `en`
 
     译文语言. 支持的语言 [Languages ](#languages)
     
+- **requestOpts**  
+ 
+    Type: `RequestOptions`  Default: `{}`
+
+    参考 [request options](https://github.com/request/request#requestoptions-callback)
 ### 返回 `object`:
 - `from` - 源语言
 - `to` - 译文语言

@@ -8,7 +8,7 @@ test('translate without any options', async t => {
         const { trans_result, from, to } = res;
 
         t.is(trans_result.src, "让我们来翻译吧!");
-        t.is(trans_result.dst, "Let's translate it.");
+        t.is(trans_result.dst, "Let's translate!");
         t.is(from, "zh");
         t.is(to, "en");
     } catch (err) {
@@ -24,7 +24,7 @@ test('translate with options', async t => {
         const { trans_result, from, to } = res;
 
         t.is(trans_result.src, "让我们来翻译吧!");
-        t.is(trans_result.dst, "우리 번역해 봅시다!");
+        t.is(trans_result.dst, "번역 해 봅 시다!");
         t.is(from, "zh");
         t.is(to, "kor");
     } catch (err) {
@@ -33,12 +33,10 @@ test('translate with options', async t => {
 });
 
 test('translate with error handler', async t => {
-    try {
-        await translate("让我们来翻译吧!", {
-            from: "en",
-            to: "en"
-        });
-    } catch (err) {
+    await translate("让我们来翻译吧!", {
+        from: "",
+        to: "en"
+    }).catch(err => {
         t.is(err.error, 999)
-    }
+    });
 });
