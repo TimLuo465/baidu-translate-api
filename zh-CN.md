@@ -61,6 +61,12 @@ Type: `Object`
 
     - `dst` - 译文
     - `src` - 请求翻译的文本
+
+## setGlobalConfig(config)
+ name | desc
+ ---  | ---
+ useLocalStore | 将token相关的配置存在内存中，默认为false
+
 ## Languages
 
 abbr | name

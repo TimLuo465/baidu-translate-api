@@ -69,6 +69,11 @@ Type: `Object`
     - `dst` - The translation
     - `src` - The source *(equal to query)*
 
+## setGlobalConfig(config)
+ name | desc
+ ---  | ---
+ useLocalStore | store the token config in memory. default: false.
+
 ## Languages
 
 abbr | name
