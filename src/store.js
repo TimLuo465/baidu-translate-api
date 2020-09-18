@@ -2,13 +2,20 @@ const Configstore  = require('configstore');
 const pkg = require("../package.json");
 const globalConfig = require('./globalConfig');
 const { COOKIES, PARAMS } = require("./constant");
-let conf;
+let store = null;
 
-if (globalConfig.useLocalStore) {
-    conf = new Map();
-} else {
-    conf = new Configstore(pkg.name);
+function getStore() {
+    if (store) return store;
+
+    if (globalConfig.useLocalStore) {
+        store = new Map();
+    } else {
+        store = new Configstore(pkg.name);
+    }
+
+    return store;
 }
+
 
 /**
  * {
@@ -24,8 +31,8 @@ if (globalConfig.useLocalStore) {
  * }
  */
 module.exports = {
-    getCookies: () => conf.get(COOKIES),
-    setCookies: cookies => conf.set(COOKIES, cookies),
-    getParams: () => conf.get(PARAMS),
-    setParams: params => conf.set(PARAMS, params)
+    getCookies: () => getStore().get(COOKIES),
+    setCookies: cookies => getStore().set(COOKIES, cookies),
+    getParams: () => getStore().get(PARAMS),
+    setParams: params => getStore().set(PARAMS, params)
 };
