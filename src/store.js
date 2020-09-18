@@ -1,8 +1,14 @@
 const Configstore  = require('configstore');
 const pkg = require("../package.json");
-const conf = new Configstore(pkg.name);
-
+const globalConfig = require('./globalConfig');
 const { COOKIES, PARAMS } = require("./constant");
+let conf;
+
+if (globalConfig.useLocalStore) {
+    conf = new Map();
+} else {
+    conf = new Configstore(pkg.name);
+}
 
 /**
  * {

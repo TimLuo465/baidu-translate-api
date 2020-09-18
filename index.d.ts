@@ -12,6 +12,12 @@ declare namespace baidu_translate_api {
     requestOpts?: any;
   }
 
+  type GlobalConfig = {
+    useLocalStore: boolean
+  }
+
+  export function setGlobalConfig(config: GlobalConfig): void;
+  
   export interface transResult {
     dst: string;
     src: string;

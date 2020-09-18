@@ -4,6 +4,7 @@ const request = require("request");
 const token = require("./token");
 const cookie = require("./cookie");
 const store = require("./store");
+const globalConfig = require('./globalConfig');
 
 const { transapi } = require("./constant");
 
@@ -113,8 +114,12 @@ class Translate {
     }
 }
 
-module.exports = (query, opts = {}) => {
+module.exports = function translate(query, opts = {}) {
     return new Translate(query, opts).request();
 };
+
+module.exports.setGlobalConfig = function(config) {
+    Object.assign(globalConfig, config);
+}
 
 module.exports.language = language;
