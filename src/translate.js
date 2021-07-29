@@ -75,15 +75,23 @@ class Translate {
 
                         const { trans_result } = result;
                         const { from, to } = trans_result;
-                        const { dst, src } = trans_result.data[0];
+                        // const { dst, src } = trans_result.data[0];
+
+                        let dstArr=[];
+                        let srcArr=[];
+                        trans_result.data.forEach(item=>{
+                            dstArr.push(item.dst);
+                            srcArr.push(item.src);
+                        });
 
                         resolve({
                             from,
                             to,
                             trans_result: {
-                                dst,
-                                src
-                            }
+                                dst: dstArr.join('\n'),
+                                src: srcArr.join('\n')
+                            },
+                            original_result: trans_result
                         });
                     } catch (err) {
                         reject(err);
